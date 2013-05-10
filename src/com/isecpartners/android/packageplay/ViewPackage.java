@@ -1,6 +1,9 @@
 package com.isecpartners.android.packageplay;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,9 +13,14 @@ import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.InstrumentationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.pm.PermissionInfo;
+import android.content.pm.ProviderInfo;
+import android.content.pm.ServiceInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -171,7 +179,8 @@ public class ViewPackage extends Activity {
 				mActivitiesList.add(ai.name);
 
 		ArrayAdapter<String> AA = new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_dropdown_item, mActivitiesList);
+				R.layout.multiline_spinner_dropdown_item, mActivitiesList);
+
 		mActivities.setAdapter(AA);
 
 		if (mActivities.getCount() > 0)
@@ -207,6 +216,7 @@ public class ViewPackage extends Activity {
 			sb.append("\nPackage Name: " + pi.packageName);
 
 			if (pi.requestedPermissions != null) {
+				Collections.sort(Arrays.asList(pi.requestedPermissions));
 				sb.append("\n\nUses Permissions: ");
 				for (int i = 0; i < pi.requestedPermissions.length; i++) {
 					sb.append(pi.requestedPermissions[i]
@@ -220,6 +230,11 @@ public class ViewPackage extends Activity {
 				sb.append("\n\nPackage currently DISABLED");
 
 			if (pi.permissions != null) {
+				Collections.sort(Arrays.asList(pi.permissions), new Comparator<PermissionInfo>() {
+					public int compare(PermissionInfo o1, PermissionInfo o2) {
+							return o1.name.compareToIgnoreCase(o2.name);
+					}
+				});
 				sb.append("\n\nDefines Permissions: ");
 				for (int i = 0; i < pi.permissions.length; i++) {
 					sb.append(pi.permissions[i].name
@@ -230,6 +245,11 @@ public class ViewPackage extends Activity {
 			}
 
 			if (pi.activities != null) {
+				Collections.sort(Arrays.asList(pi.activities), new Comparator<ActivityInfo>() {
+						public int compare(ActivityInfo o1, ActivityInfo o2) {
+								return o1.name.compareToIgnoreCase(o2.name);
+						}
+				});
 				sb.append("\n\nExported Activities: ");
 				for (int i = 0; i < pi.activities.length; i++) {
 					if (pi.activities[i].exported) {
@@ -261,6 +281,12 @@ public class ViewPackage extends Activity {
 			}
 
 			if (pi.services != null) {
+				Collections.sort(Arrays.asList(pi.services), new Comparator<ServiceInfo>() {
+					public int compare(ServiceInfo o1, ServiceInfo o2) {
+							return o1.name.compareToIgnoreCase(o2.name);
+					}
+				});
+
 				sb.append("\n\nExported Services: ");
 				for (int i = 0; i < pi.services.length; i++) {
 					if (pi.services[i].exported) {
@@ -275,6 +301,11 @@ public class ViewPackage extends Activity {
 			}
 
 			if (pi.receivers != null) {
+				Collections.sort(Arrays.asList(pi.receivers), new Comparator<ActivityInfo>() {
+					public int compare(ActivityInfo o1, ActivityInfo o2) {
+							return o1.name.compareToIgnoreCase(o2.name);
+					}
+				});
 				sb.append("\n\nExported Broadcast Receivers: ");
 				for (int i = 0; i < pi.receivers.length; i++) {
 					ActivityInfo ai = pi.receivers[i];
@@ -290,6 +321,11 @@ public class ViewPackage extends Activity {
 			}
 
 			if (pi.providers != null) {
+				Collections.sort(Arrays.asList(pi.providers), new Comparator<ProviderInfo>() {
+					public int compare(ProviderInfo o1, ProviderInfo o2) {
+							return o1.name.compareToIgnoreCase(o2.name);
+					}
+				});
 				sb.append("\n\nExported Content Providers: ");
 				for (int i = 0; i < pi.providers.length; i++) {
 					if (pi.providers[i].exported) {
@@ -307,6 +343,11 @@ public class ViewPackage extends Activity {
 			}
 
 			if (pi.instrumentation != null) {
+				Collections.sort(Arrays.asList(pi.instrumentation), new Comparator<InstrumentationInfo>() {
+					public int compare(InstrumentationInfo o1, InstrumentationInfo o2) {
+							return o1.name.compareToIgnoreCase(o2.name);
+					}
+				});
 				sb.append("\n\nInstrumentations: ");
 
 				for (int i = 0; i < pi.instrumentation.length; i++) {
@@ -321,6 +362,11 @@ public class ViewPackage extends Activity {
 			}
 
 			if (pi.applicationInfo != null) {
+				Collections.sort(Arrays.asList(pi.applicationInfo), new Comparator<ApplicationInfo>() {
+					public int compare(ApplicationInfo o1, ApplicationInfo o2) {
+							return o1.name.compareToIgnoreCase(o2.name);
+					}
+				});
 				sb.append("\n\nApplication Infomation:");
 				if (pi.applicationInfo.permission != null)
 					sb.append("\nApplication permission: "
